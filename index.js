@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 
 mongoose
     .connect(
-        "MONGODB_URI"
+        "mongodb+srv://catdbb1000:Q6AROqpJXeTWWVXi@cluster0.aud9pyi.mongodb.net/"
     )
     .then(() => console.log("connection success"))
     .catch((err) => console.error(err));
