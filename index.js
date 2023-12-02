@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 
 mongoose
     .connect(
-        "0.0.0.0"
+        "0.0.0.0/0"
     )
     .then(() => console.log("connection success"))
     .catch((err) => console.error(err));
