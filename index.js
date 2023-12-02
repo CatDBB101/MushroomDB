@@ -1,7 +1,7 @@
 // !: Express
 const express = require("express");
 const app = express();
-const UsersRoute = require("./Route/Users");
+// const UsersRoute = require("./Route/Users");
 
 // !: MongDB
 const mongoose = require("mongoose");
@@ -22,7 +22,60 @@ app.use(
 );
 
 // !: API path way section
-app.use("/users", UsersRoute);
+// app.use("/users", UsersRoute);
+
+// !: Schemas & Models
+const UsersSchema = new mongoose.Schema({
+    username: String,
+    password: String,
+    key: String,
+});
+const UsersModel = mongoose.model("users", UsersSchema);
+
+app.get("/", async(req, res, next) => {
+    console.log("[Action | GET] - Check for server status");
+    res.send("Server is running...");
+});
+
+app.get("/users/all", async(req, res, next) => {
+    console.log("[Action | GET] - Get all users data");
+    let users_data = await UsersModel.find();
+    res.send(users_data);
+});
+
+app.get("/users/key", async(req, res, next) => {
+    console.log("[Action | GET] - Get key", req.body);
+
+    let CheckUsernameResult = await UsersModel.find({
+        username: req.body.username,
+    });
+    // ?: Check username
+    if (CheckUsernameResult.length > 0) { var CheckUsername = true; }
+    else { var CheckUsername = false; }
+
+    let CheckPasswordResult = await UsersModel.find({
+        username: req.body.username,
+        password: req.body.password,
+    });
+    // ?: Check password
+    if (CheckPasswordResult.length > 0) { var CheckPassword = true; }
+    else { var CheckPassword = false; }
+
+    res.send([CheckUsername, CheckPassword, CheckPasswordResult[0].key]);
+});
+
+app.post("/users/", async(req, res, next) => {
+    console.log("[Action | POST] - New register", req.body);
+
+    let saving_data = {
+        username: req.body.username,
+        password: req.body.password,
+        key: req.body.key,
+    };
+
+    let status = await UsersModel.create(saving_data);
+    res.send(status);
+});
 
 app.listen(process.env.port || 2000);
 
