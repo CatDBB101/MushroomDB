@@ -10,9 +10,9 @@ const UsersSchema = new mongoose.Schema({
 });
 const UsersModel = mongoose.model("users", UsersSchema);
 
-router.get("/", (req, res, next) => {
+router.get("/", async(req, res, next) => {
     console.log("[Action | GET] - Check for server status");
-    res.send("Server is running...");
+    res.json("Server is running...");
 });
 
 router.get("/all", async(req, res, next) => {
