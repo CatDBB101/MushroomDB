@@ -5,7 +5,7 @@ const app = express();
 
 // !: MongDB
 const mongoose = require("mongoose");
-     
+
 mongoose
     .connect(
         "mongodb+srv://catdbb1000:Q6AROqpJXeTWWVXi@cluster0.aud9pyi.mongodb.net/"
@@ -21,6 +21,10 @@ app.use(
     })
 );
 
+// !: CookieParser
+const cookieParser = require("cookie-parser");
+app.use(cookieParser()); // initializing the lib
+
 // !: API path way section
 // app.use("/users", UsersRoute);
 
@@ -32,39 +36,43 @@ const UsersSchema = new mongoose.Schema({
 });
 const UsersModel = mongoose.model("users", UsersSchema);
 
-app.get("/", async(req, res, next) => {
+app.get("/", async (req, res, next) => {
     console.log("[Action | GET] - Check for server status");
     res.send("Server is running...");
 });
 
-app.get("/users/all", async(req, res, next) => {
+app.get("/users/all", async (req, res, next) => {
     console.log("[Action | GET] - Get all users data");
     let users_data = await UsersModel.find();
     res.send(users_data);
 });
 
-app.get("/users/key", async(req, res, next) => {
+app.get("/users/key", async (req, res, next) => {
     console.log("[Action | GET] - Get key", req.body);
 
     let CheckUsernameResult = await UsersModel.find({
         username: req.body.username,
     });
     // ?: Check username
-    if (CheckUsernameResult.length > 0) { var CheckUsername = true; }
-    else { var CheckUsername = false; }
+    if (CheckUsernameResult.length > 0) {
+        var CheckUsername = true;
+    } else {
+        var CheckUsername = false;
+    }
 
     let CheckPasswordResult = await UsersModel.find({
         username: req.body.username,
         password: req.body.password,
     });
     // ?: Check password
-    if (CheckPasswordResult.length > 0) { var CheckPassword = true; }
-    else { var CheckPassword = false; }
-
-    console.log(CheckUsernameResult, CheckUsername);
-    console.log(CheckPasswordResult, CheckPassword);
+    if (CheckPasswordResult.length > 0) {
+        var CheckPassword = true;
+    } else {
+        var CheckPassword = false;
+    }
 
     if (CheckUsername == true && CheckPassword == true) {
+        res.cookie("MushroomLoginKey", CheckPasswordResult[0].key);
         res.send([CheckUsername, CheckPassword, CheckPasswordResult[0].key]);
     } else if (CheckUsername == true && CheckPassword == false) {
         res.send([CheckUsername, CheckPassword, "Password is incorrect"]);
@@ -73,7 +81,7 @@ app.get("/users/key", async(req, res, next) => {
     }
 });
 
-app.post("/users/", async(req, res, next) => {
+app.post("/users/", async (req, res, next) => {
     console.log("[Action | POST] - New register", req.body);
 
     let saving_data = {
