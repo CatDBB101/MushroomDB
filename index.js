@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 
 mongoose
     .connect(
-        "mongodb+srv://catdbb1000:Q6AROqpJXeTWWVXi@cluster0.aud9pyi.mongodb.net/?retryWrites=true&w=majority"
+        "0.0.0.0"
     )
     .then(() => console.log("connection success"))
     .catch((err) => console.error(err));
