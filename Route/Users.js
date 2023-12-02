@@ -10,6 +10,11 @@ const UsersSchema = new mongoose.Schema({
 });
 const UsersModel = mongoose.model("users", UsersSchema);
 
+router.get("/", (req, res, next) => {
+    console.log("[Action | GET] - Check for server status");
+    res.send("Server is running...");
+});
+
 router.get("/all", async(req, res, next) => {
     console.log("[Action | GET] - Get all users data");
     let users_data = await UsersModel.find();
