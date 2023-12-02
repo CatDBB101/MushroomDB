@@ -5,7 +5,7 @@ const app = express();
 
 // !: MongDB
 const mongoose = require("mongoose");
-
+     
 mongoose
     .connect(
         "mongodb+srv://catdbb1000:Q6AROqpJXeTWWVXi@cluster0.aud9pyi.mongodb.net/"
@@ -61,7 +61,16 @@ app.get("/users/key", async(req, res, next) => {
     if (CheckPasswordResult.length > 0) { var CheckPassword = true; }
     else { var CheckPassword = false; }
 
-    res.send([CheckUsername, CheckPassword, CheckPasswordResult[0].key]);
+    console.log(CheckUsernameResult, CheckUsername);
+    console.log(CheckPasswordResult, CheckPassword);
+
+    if (CheckUsername == true && CheckPassword == true) {
+        res.send([CheckUsername, CheckPassword, CheckPasswordResult[0].key]);
+    } else if (CheckUsername == true && CheckPassword == false) {
+        res.send([CheckUsername, CheckPassword, "Password is incorrect"]);
+    } else {
+        res.send([CheckUsername, CheckPassword, "Not found username"]);
+    }
 });
 
 app.post("/users/", async(req, res, next) => {
