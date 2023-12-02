@@ -24,6 +24,11 @@ app.use(
 // !: API path way section
 app.use("/users", UsersRoute);
 
+app.get("/", (req, res) => {
+    console.log("[Action | Get] Check server status");
+    res.send("Server is running...");
+});
+
 app.listen(process.env.port || 2000);
 
 module.exports = app;
