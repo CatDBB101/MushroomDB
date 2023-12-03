@@ -47,7 +47,7 @@ app.get("/users/all", async (req, res, next) => {
     res.send(users_data);
 });
 
-app.get("/users/key", async (req, res, next) => {
+app.post("/users/key", async (req, res, next) => {
     console.log("[Action | GET] - Get key", req.body);
 
     let CheckUsernameResult = await UsersModel.find({
