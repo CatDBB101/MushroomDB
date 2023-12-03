@@ -77,8 +77,8 @@ app.get("/users/key", async (req, res, next) => {
     } else if (CheckUsername == true && CheckPassword == false) {
         res.send([CheckUsername, CheckPassword, "Password is incorrect", req.body.username, req.body.password]);
     } else {
-        res.send(req);
-        // res.send([CheckUsername, CheckPassword, "Not found username", req.body.username, req.body.password]);
+        // res.send(req);
+        res.send([CheckUsername, CheckPassword, "Not found username", req.body.username, req.body.password]);
     }
 });
 
