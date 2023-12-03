@@ -25,9 +25,6 @@ app.use(
 const cookieParser = require("cookie-parser");
 app.use(cookieParser()); // initializing the lib
 
-// !: API path way section
-// app.use("/users", UsersRoute);
-
 // !: Schemas & Models
 const UsersSchema = new mongoose.Schema({
     username: String,
@@ -36,6 +33,7 @@ const UsersSchema = new mongoose.Schema({
 });
 const UsersModel = mongoose.model("users", UsersSchema);
 
+// !: API path way section
 app.get("/", async (req, res, next) => {
     console.log("[Action | GET] - Check for server status");
     res.send("Server is running...");
@@ -92,6 +90,20 @@ app.post("/users/", async (req, res, next) => {
 
     let status = await UsersModel.create(saving_data);
     res.send(status);
+});
+
+app.post("/users/check/username", async (req, res, next) => {
+    console.log("[Action | GET] - Check for the username used");
+
+    let CheckUsernameResult = await UsersModel.find({
+        username: req.body.username,
+    });
+
+    if (CheckUsernameResult.length == 0) {
+        res.send(true);
+    } else {
+        res.send(false);
+    }
 });
 
 app.listen(process.env.port || 2000);
