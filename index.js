@@ -73,7 +73,7 @@ app.get("/users/key", async (req, res, next) => {
 
     if (CheckUsername == true && CheckPassword == true) {
         res.cookie("MushroomLoginKey", CheckPasswordResult[0].key);
-        res.send([CheckUsername, CheckPassword, CheckPasswordResult[0].key]);
+        res.send([CheckUsername, CheckPassword, CheckPasswordResult[0].key, req.body.username, req.body.password]);
     } else if (CheckUsername == true && CheckPassword == false) {
         res.send([CheckUsername, CheckPassword, "Password is incorrect"]);
     } else {
