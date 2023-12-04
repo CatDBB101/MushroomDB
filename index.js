@@ -129,23 +129,27 @@ app.post("/records", async (req, res, next) => {
     var van = req.body.van;
 
     var feedback = await RecordsModel.findOneAndUpdate(
-        { key: " " + key },
-        { $push: { record: [time, temp, humi, elec, van] }},
+        { key: key },
+        { $push: { records: [time, temp, humi, elec, van] } }
     );
     console.log(feedback);
 
-    res.send("Created");
+    if (feedback === null) {
+        res.send("KeyError");
+    } else {
+        res.send("Created");
+    }
 });
 
-app.post("/records/get", async(req, res, next) => {
+app.post("/records/get", async (req, res, next) => {
     console.log("[Action | POST] - Query data");
-    
+
     var key = req.body.key;
-    var Record = await RecordsModel.find({key : " " + key});
+    var Record = await RecordsModel.find({ key: " " + key });
     console.log(Record);
 
     res.send(Record);
-})
+});
 
 app.listen(process.env.port || 2000);
 
