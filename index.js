@@ -33,6 +33,15 @@ const UsersSchema = new mongoose.Schema({
 });
 const UsersModel = mongoose.model("users", UsersSchema);
 
+const RecordsSchema = new mongoose.Schema({
+    key: String,
+    temp: [],
+    humi: [],
+    elec: [],
+    van: [],
+});
+const RecordsModel = mongoose.model("records", RecordsSchema);
+
 // !: API path way section
 app.get("/", async (req, res, next) => {
     console.log("[Action | GET] - Check for server status");
@@ -87,8 +96,16 @@ app.post("/users/", async (req, res, next) => {
         password: req.body.password,
         key: req.body.key,
     };
-
     let status = await UsersModel.create(saving_data);
+
+    let data = {
+        key: req.body.key,
+        temp: [],
+        humi: [],
+        elec: [],
+        van: [],
+    };
+    let _status = await RecordsModel.create(data);
     res.send(status);
 });
 
@@ -104,6 +121,24 @@ app.post("/users/check/username", async (req, res, next) => {
     } else {
         res.send(false);
     }
+});
+
+app.post("/records", async (req, res, next) => {
+    console.log("[Action | POST] - Create new record");
+
+    console.log(req.body);
+    var key = req.body.key;
+    var time = req.body.time;
+    var type = req.body.type;
+    var value = req.body.value;
+
+    var feedback = await RecordsModel.findOneAndUpdate(
+        { key: key },
+        { $push: { temp: [time, type, value] } },
+    );
+    console.log(feedback);
+
+    res.send("ok");
 });
 
 app.listen(process.env.port || 2000);
