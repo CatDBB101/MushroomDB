@@ -145,7 +145,7 @@ app.post("/records/get", async (req, res, next) => {
     console.log("[Action | POST] - Query data");
 
     var key = req.body.key;
-    var Record = await RecordsModel.find({ key: " " + key });
+    var Record = await RecordsModel.find({ key: key });
     console.log(Record);
 
     res.send(Record);
