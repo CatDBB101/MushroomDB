@@ -100,10 +100,7 @@ app.post("/users/", async (req, res, next) => {
 
     let data = {
         key: req.body.key,
-        temp: [],
-        humi: [],
-        elec: [],
-        van: [],
+        records: [],
     };
     let _status = await RecordsModel.create(data);
     res.send(status);
@@ -129,12 +126,14 @@ app.post("/records", async (req, res, next) => {
     console.log(req.body);
     var key = req.body.key;
     var time = req.body.time;
-    var type = req.body.type;
-    var value = req.body.value;
+    var temp = req.body.temp;
+    var humi = req.body.humi;
+    var elec = req.body.elec;
+    var van = req.body.van;
 
     var feedback = await RecordsModel.findOneAndUpdate(
         { key: key },
-        { $push: { temp: [time, type, value] } },
+        { $push: { record: [time, temp, humi, elec, van] }},
     );
     console.log(feedback);
 
