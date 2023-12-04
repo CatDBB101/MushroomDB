@@ -35,10 +35,7 @@ const UsersModel = mongoose.model("users", UsersSchema);
 
 const RecordsSchema = new mongoose.Schema({
     key: String,
-    temp: [],
-    humi: [],
-    elec: [],
-    van: [],
+    records: [],
 });
 const RecordsModel = mongoose.model("records", RecordsSchema);
 
@@ -132,7 +129,7 @@ app.post("/records", async (req, res, next) => {
     var van = req.body.van;
 
     var feedback = await RecordsModel.findOneAndUpdate(
-        { key: key },
+        { key: " " + key },
         { $push: { record: [time, temp, humi, elec, van] }},
     );
     console.log(feedback);
@@ -144,7 +141,7 @@ app.post("/records/get", async(req, res, next) => {
     console.log("[Action | POST] - Query data");
     
     var key = req.body.key;
-    var Record = await RecordsModel.find({key : key});
+    var Record = await RecordsModel.find({key : " " + key});
     console.log(Record);
 
     res.send(Record);
