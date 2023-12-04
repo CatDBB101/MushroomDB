@@ -151,6 +151,22 @@ app.post("/records/get", async (req, res, next) => {
     res.send(Record);
 });
 
+app.post("/records/reset", async (req, res, next) => {
+    console.log("[Action | POST] - Have reset record");
+
+    var key = req.body.key;
+    RecordsModel.deleteOne({
+        key: key,
+    }).then(async () => {
+        let data = {
+            key: req.body.key,
+            records: [],
+        };
+        let _status = await RecordsModel.create(data);
+        res.send("Deleted");
+    });
+});
+
 app.listen(process.env.port || 2000);
 
 module.exports = app;
