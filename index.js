@@ -141,6 +141,16 @@ app.post("/records", async (req, res, next) => {
     res.send("Created");
 });
 
+app.post("/records/get", async(req, res, next) => {
+    console.log("[Action | POST] - Query data");
+    
+    var key = req.body.key;
+    var Record = await RecordsModel.find({key : key});
+    console.log(Record);
+
+    res.send(Record);
+})
+
 app.listen(process.env.port || 2000);
 
 module.exports = app;
