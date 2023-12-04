@@ -138,7 +138,7 @@ app.post("/records", async (req, res, next) => {
     );
     console.log(feedback);
 
-    res.send("ok");
+    res.send("Created");
 });
 
 app.listen(process.env.port || 2000);
