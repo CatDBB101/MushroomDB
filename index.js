@@ -167,6 +167,19 @@ app.post("/records/reset", async (req, res, next) => {
     });
 });
 
+app.post("/get/name", async (req, res, next) => {
+    console.log("[Action | POST] - Get the name by using key");
+
+    var key = req.body.key;
+    var name = await UsersModel.find({key: key});
+    
+    if (name.length == 0) {
+        res.send("Not found");
+    } else {
+        res.send(name[0].username);
+    }
+});
+
 app.listen(process.env.port || 2000);
 
 module.exports = app;
