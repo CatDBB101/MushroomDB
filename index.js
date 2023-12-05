@@ -126,11 +126,11 @@ app.post("/records", async (req, res, next) => {
     var temp = req.body.temp;
     var humi = req.body.humi;
     var elec = req.body.elec;
-    var van = req.body.van;
+    var fan = req.body.fan;
 
     var feedback = await RecordsModel.findOneAndUpdate(
         { key: key },
-        { $push: { records: [time, temp, humi, elec, van] } }
+        { $push: { records: [time, temp, humi, elec, fan] } }
     );
     console.log(feedback);
 
