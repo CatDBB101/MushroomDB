@@ -99,6 +99,7 @@ app.post("/users/", async (req, res, next) => {
     let data = {
         key: req.body.key,
         records: [],
+        mode: "auto",
     };
     let _status = await RecordsModel.create(data);
     res.send(status);
@@ -162,6 +163,7 @@ app.post("/records/reset", async (req, res, next) => {
         let data = {
             key: req.body.key,
             records: [],
+            mode: "manual",
         };
         let _status = await RecordsModel.create(data);
         res.send("Deleted");
