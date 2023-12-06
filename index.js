@@ -199,6 +199,38 @@ app.post("/users/delete", async (req, res, next) => {
     res.send("Deleted");
 });
 
+app.post("/records/get/mode", async (req, res, next) => {
+    console.log("[Action | GET] - Get mode");
+
+    var key = req.body.key;
+    var response = await RecordsModel.findOne({ key: key });
+    var mode = response.mode;
+
+    if (response.length != 0) {
+        res.send(mode);
+    } else {
+        res.send("KeyError");
+    }
+});
+
+app.post("/records/change/mode", async (req, res, next) => {
+    console.log("[Action | GET] - Change mode");
+
+    var key = req.body.key;
+    var change_to = req.body.change_to;
+
+    var status = await RecordsModel.updateOne(
+        { key: key },
+        {
+            $set: {
+                mode: change_to,
+            },
+        }
+    );
+
+    res.send(status);
+});
+
 app.listen(process.env.port || 2000);
 
 module.exports = app;
