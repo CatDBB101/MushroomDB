@@ -187,21 +187,11 @@ app.post("/users/delete", async (req, res, next) => {
 
     RecordsModel.deleteOne({
         key: key,
-    }).then(async () => {
-        let data = {
-            key: req.body.key,
-            records: [],
-        };
-    });
+    }).then(async () => {});
 
     UsersModel.deleteOne({
         key: key,
-    }).then(async () => {
-        let data = {
-            key: req.body.key,
-            records: [],
-        };
-    });
+    }).then(async () => {});
 
     res.send("Deleted");
 });
