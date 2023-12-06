@@ -37,6 +37,7 @@ const RecordsSchema = new mongoose.Schema({
     key: String,
     records: [],
     mode: String,
+    status: String,
 });
 const RecordsModel = mongoose.model("records", RecordsSchema);
 
@@ -100,6 +101,7 @@ app.post("/users/", async (req, res, next) => {
         key: req.body.key,
         records: [],
         mode: "auto",
+        status: "off",
     };
     let _status = await RecordsModel.create(data);
     res.send(status);
@@ -164,6 +166,7 @@ app.post("/records/reset", async (req, res, next) => {
             key: req.body.key,
             records: [],
             mode: "manual",
+            status: "off",
         };
         let _status = await RecordsModel.create(data);
         res.send("Deleted");
@@ -224,6 +227,38 @@ app.post("/records/change/mode", async (req, res, next) => {
         {
             $set: {
                 mode: change_to,
+            },
+        }
+    );
+
+    res.send(status);
+});
+
+app.post("/records/get/status", async (req, res, next) => {
+    console.log("[Action | GET] - Get mode");
+
+    var key = req.body.key;
+    var response = await RecordsModel.findOne({ key: key });
+    var status = response.status;
+
+    if (response.length != 0) {
+        res.send(status);
+    } else {
+        res.send("KeyError");
+    }
+});
+
+app.post("/records/change/status", async (req, res, next) => {
+    console.log("[Action | POST] - Change van status");
+
+    var key = req.body.key;
+    var change_to = req.body.change_to;
+
+    var status = await RecordsModel.updateOne(
+        { key: key },
+        {
+            $set: {
+                status: change_to,
             },
         }
     );
