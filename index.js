@@ -171,13 +171,39 @@ app.post("/get/name", async (req, res, next) => {
     console.log("[Action | POST] - Get the name by using key");
 
     var key = req.body.key;
-    var name = await UsersModel.find({key: key});
-    
+    var name = await UsersModel.find({ key: key });
+
     if (name.length == 0) {
         res.send("Not found");
     } else {
         res.send(name[0].username);
     }
+});
+
+app.post("/users/delete", async (req, res, next) => {
+    console.log("[Action | DELETE] - Delete account");
+
+    var key = req.body.key;
+
+    RecordsModel.deleteOne({
+        key: key,
+    }).then(async () => {
+        let data = {
+            key: req.body.key,
+            records: [],
+        };
+    });
+
+    UsersModel.deleteOne({
+        key: key,
+    }).then(async () => {
+        let data = {
+            key: req.body.key,
+            records: [],
+        };
+    });
+
+    res.send("Deleted");
 });
 
 app.listen(process.env.port || 2000);
