@@ -35,8 +35,8 @@ const UsersModel = mongoose.model("users", UsersSchema);
 
 const RecordsSchema = new mongoose.Schema({
     key: String,
-    mode: String,
     records: [],
+    mode: String,
 });
 const RecordsModel = mongoose.model("records", RecordsSchema);
 
