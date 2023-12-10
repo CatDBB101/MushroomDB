@@ -277,7 +277,7 @@ app.post("/records/get/auto_temp", async (req, res, next) => {
     var auto_temp = response.auto_temp;
 
     if (response.length != 0) {
-        res.send(auto_temp);
+        res.send(Number(auto_temp));
     } else {
         res.send("KeyError");
     }
