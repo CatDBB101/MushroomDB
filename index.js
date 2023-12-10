@@ -38,6 +38,7 @@ const RecordsSchema = new mongoose.Schema({
     records: [],
     mode: String,
     status: String,
+    auto_temp: String,
 });
 const RecordsModel = mongoose.model("records", RecordsSchema);
 
@@ -102,6 +103,7 @@ app.post("/users/", async (req, res, next) => {
         records: [],
         mode: "auto",
         status: "off",
+        auto_temp: "25",
     };
     let _status = await RecordsModel.create(data);
     res.send(status);
@@ -167,6 +169,7 @@ app.post("/records/reset", async (req, res, next) => {
             records: [],
             mode: "manual",
             status: "off",
+            auto_temp: "25",
         };
         let _status = await RecordsModel.create(data);
         res.send("Deleted");
@@ -259,6 +262,38 @@ app.post("/records/change/status", async (req, res, next) => {
         {
             $set: {
                 status: change_to,
+            },
+        }
+    );
+
+    res.send(status);
+});
+
+app.post("/records/get/auto_temp", async (req, res, next) => {
+    console.log("[Action | GET] - Get mode");
+
+    var key = req.body.key;
+    var response = await RecordsModel.findOne({ key: key });
+    var auto_temp = response.auto_temp;
+
+    if (response.length != 0) {
+        res.send(auto_temp);
+    } else {
+        res.send("KeyError");
+    }
+});
+
+app.post("/records/change/auto_temp", async (req, res, next) => {
+    console.log("[Action | GET] - Change mode");
+
+    var key = req.body.key;
+    var change_to = req.body.change_to;
+
+    var status = await RecordsModel.updateOne(
+        { key: key },
+        {
+            $set: {
+                auto_temp: change_to,
             },
         }
     );
